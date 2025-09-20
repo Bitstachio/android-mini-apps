@@ -1,8 +1,10 @@
 package com.github.barbodh.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private EditText etUsername;
     private EditText etPassword;
+    private TextView tvRegister;
 
     // =========================
     // Initializers
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
+        tvRegister = findViewById(R.id.tvRegister);
     }
 
     private void setupListeners() {
@@ -53,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: This toast is used for debugging; remove later
         btnLogin.setOnClickListener(v -> {
             Toast.makeText(this, "Login button clicked", Toast.LENGTH_SHORT).show();
+        });
+
+        tvRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 
