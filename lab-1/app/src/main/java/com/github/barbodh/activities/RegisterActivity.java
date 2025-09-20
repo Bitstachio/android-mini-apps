@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etDob;
+    private EditText etUsername;
     private EditText etEmail;
     private EditText etPassword;
     private EditText etConfirmPassword;
@@ -61,6 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
         etFirstName = findViewById(R.id.et_first_name);
         etLastName = findViewById(R.id.et_last_name);
         etDob = findViewById(R.id.et_dob);
+        etUsername = findViewById(R.id.et_username_register);
         etEmail = findViewById(R.id.et_email_register);
         etPassword = findViewById(R.id.et_password_register);
         etConfirmPassword = findViewById(R.id.et_confirm_password);
@@ -126,6 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
         String firstName = etFirstName.getText().toString().trim();
         String lastName = etLastName.getText().toString().trim();
         String dob = etDob.getText().toString().trim();
+        String username = etUsername.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString();
         String confirmPassword = etConfirmPassword.getText().toString();
@@ -143,6 +146,11 @@ public class RegisterActivity extends AppCompatActivity {
         if (dob.isEmpty()) {
             etDob.setError("Date of birth is required"); // Not showing the error, why? (I added toast to display the error)
             Toast.makeText(this, "Please select a date of birth", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (username.isEmpty()) {
+            etUsername.setError("Username is required");
+            etUsername.requestFocus();
             return;
         }
         if (email.isEmpty()) {
