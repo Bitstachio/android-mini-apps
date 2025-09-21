@@ -21,6 +21,7 @@ import com.github.barbodh.R;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,6 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView tvLoginLink;
 
     private Calendar myCalendar;
+
+    // Password Strength Regex Patterns
+    private static final Pattern PASSWORD_HAS_UPPERCASE = Pattern.compile("[A-Z]");
+    private static final Pattern PASSWORD_HAS_LOWERCASE = Pattern.compile("[a-z]");
+    private static final Pattern PASSWORD_HAS_DIGIT = Pattern.compile("[0-9]");
+    private static final Pattern PASSWORD_HAS_SPECIAL_CHAR = Pattern.compile("[!@#$%^&*()_\\-+=\\[\\]{};':\"\\\\|,.<>/?~`]");
+
+
 
     // =========================
     // Initializers
@@ -69,7 +78,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btn_register);
         tvLoginLink = findViewById(R.id.tv_login_link);
 
-        // Make DOB EditText non-focusable to encourage using the DatePickerDialog
         etDob.setFocusable(false);
         etDob.setClickable(true);
     }
@@ -77,7 +85,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void setupListeners() {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
-            // Validate and handle registration
             public void onClick(View v) {
                 handleRegister();
             }
@@ -86,9 +93,9 @@ public class RegisterActivity extends AppCompatActivity {
         tvLoginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate back to LoginActivity
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -121,6 +128,31 @@ public class RegisterActivity extends AppCompatActivity {
         etDob.setError(null);
     }
 
+    private boolean isPasswordStrong(String password) {
+        if (password.length() < 8) {
+            etPassword.setError("Password must be at least 8 characters long.");
+            return false;
+        }
+        if (!PASSWORD_HAS_UPPERCASE.matcher(password).find()) {
+            etPassword.setError("Password must include at least one uppercase letter.");
+            return false;
+        }
+        if (!PASSWORD_HAS_LOWERCASE.matcher(password).find()) {
+            etPassword.setError("Password must include at least one lowercase letter.");
+            return false;
+        }
+        if (!PASSWORD_HAS_DIGIT.matcher(password).find()) {
+            etPassword.setError("Password must include at least one digit.");
+            return false;
+        }
+        if (!PASSWORD_HAS_SPECIAL_CHAR.matcher(password).find()) {
+            etPassword.setError("Password must include at least one special character (e.g., @#$%).");
+            return false;
+        }
+        etPassword.setError(null);
+        return true;
+    }
+
     // =========================
     // Event Handlers
     // =========================
@@ -144,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         if (dob.isEmpty()) {
-            etDob.setError("Date of birth is required"); // Not showing the error, why? (I added toast to display the error)
+            etDob.setError("Date of birth is required");
             Toast.makeText(this, "Please select a date of birth", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -163,9 +195,12 @@ public class RegisterActivity extends AppCompatActivity {
             etEmail.requestFocus();
             return;
         }
-        // TODO: Validate password strength, including length, special characters, etc.
         if (password.isEmpty()) {
             etPassword.setError("Password is required");
+            etPassword.requestFocus();
+            return;
+        }
+        if (!isPasswordStrong(password)) {
             etPassword.requestFocus();
             return;
         }
@@ -180,7 +215,6 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Implement actual registration logic
         Toast.makeText(this, "Registration button clicked", Toast.LENGTH_SHORT).show();
     }
 }

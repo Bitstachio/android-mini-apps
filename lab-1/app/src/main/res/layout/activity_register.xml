@@ -28,6 +28,8 @@
             app:layout_constraintTop_toBottomOf="@id/tv_register_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="32dp" />
 
         <EditText
@@ -39,6 +41,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_first_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -50,6 +54,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_last_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -61,6 +67,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_dob"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -72,6 +80,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_username_register"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -83,7 +93,22 @@
             app:layout_constraintTop_toBottomOf="@id/et_email_register"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/tv_password_strength_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a digit, and a special character."
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/et_password_register"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="4dp" />
 
         <EditText
             android:id="@+id/et_confirm_password"
@@ -91,9 +116,11 @@
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
             android:inputType="textPassword"
-            app:layout_constraintTop_toBottomOf="@id/et_password_register"
+            app:layout_constraintTop_toBottomOf="@id/tv_password_strength_info"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" />
 
         <Button
@@ -104,6 +131,8 @@
             app:layout_constraintTop_toBottomOf="@id/et_confirm_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="32dp" />
 
         <LinearLayout
