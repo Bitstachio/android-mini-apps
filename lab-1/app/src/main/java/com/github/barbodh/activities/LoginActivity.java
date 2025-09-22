@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = prefs.getString(KEY_USERNAME, "");
             String password = prefs.getString(KEY_PASSWORD, "");
             boolean result = CredentialManager.validate(username, password);
-            if (result) loginSuccess();
+            if (result) loginSuccess(username);
         }
     }
 
@@ -111,10 +111,10 @@ public class LoginActivity extends AppCompatActivity {
     // =========================
 
     private void handleLogin() {
-        String email = etUsername.getText().toString().trim();
+        String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString();
 
-        if (email.isEmpty()) {
+        if (username.isEmpty()) {
             etUsername.setError("Username is required");
         } else if (password.isEmpty()) {
             etPassword.setError("Password is required");
@@ -129,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
 
                 if (checkboxRememberMe.isChecked()) {
-                    editor.putString(KEY_USERNAME, email);
+                    editor.putString(KEY_USERNAME, username);
                     editor.putString(KEY_PASSWORD, password);
                     editor.putBoolean(KEY_REMEMBER, true);
                 } else {
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 editor.apply();
 
-                loginSuccess();
+                loginSuccess(username);
             } else {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
             }
@@ -153,9 +153,10 @@ public class LoginActivity extends AppCompatActivity {
     // Utilities
     // =========================
 
-    public void loginSuccess() {
+    public void loginSuccess(String username) {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 }
