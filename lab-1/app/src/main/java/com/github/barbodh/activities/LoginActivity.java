@@ -33,6 +33,16 @@ public class LoginActivity extends AppCompatActivity {
     private TextView tvRegister;
 
     // =========================
+    // SharedPreferences Fields
+    // =========================
+
+    private SharedPreferences prefs;
+    private static final String PREFS_NAME = "MyAppPrefs";
+    private static final String KEY_USERNAME = "username";
+    private static final String KEY_PASSWORD = "password"; // Ideally shouldn't store password as plain text
+    private static final String KEY_REMEMBER = "remember";
+
+    // =========================
     // Initializers
     // =========================
 
@@ -47,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         initViews();
         setupListeners();
     }
@@ -57,6 +68,14 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         tvRegister = findViewById(R.id.tvRegister);
+
+        boolean remember = prefs.getBoolean(KEY_REMEMBER, false);
+        if (remember) {
+            etUsername.setText(prefs.getString(KEY_USERNAME, ""));
+            etPassword.setText(prefs.getString(KEY_PASSWORD, ""));
+            CheckBox checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
+            checkboxRememberMe.setChecked(true);
+        }
     }
 
     private void setupListeners() {
@@ -102,8 +121,23 @@ public class LoginActivity extends AppCompatActivity {
                     etPassword.getText().toString().trim()
             );
 
-            if (result) Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
-            else Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+            if (result) {
+                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                CheckBox checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
+                SharedPreferences.Editor editor = prefs.edit();
+
+                if (checkboxRememberMe.isChecked()) {
+                    editor.putString(KEY_USERNAME, email);
+                    editor.putString(KEY_PASSWORD, password);
+                    editor.putBoolean(KEY_REMEMBER, true);
+                } else {
+                    editor.clear(); // wipe stored credentials
+                }
+                editor.apply();
+            } else {
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
