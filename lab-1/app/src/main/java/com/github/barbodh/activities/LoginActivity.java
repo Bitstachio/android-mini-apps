@@ -144,8 +144,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if (username.isEmpty()) {
             etUsername.setError("Username is required");
+            etUsername.requestFocus();
         } else if (password.isEmpty()) {
             etPassword.setError("Password is required");
+            etPassword.requestFocus();
         } else {
             boolean result = CredentialManager.validate(
                     etUsername.getText().toString().trim(),
