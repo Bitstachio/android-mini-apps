@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private TextView tvRegister;
+    private TextView tvErrorMessage;
 
     // =========================
     // SharedPreferences Fields
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         tvRegister = findViewById(R.id.tvRegister);
+        tvErrorMessage = findViewById(R.id.tv_error_message);
     }
 
     private void setupListeners() {
@@ -139,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 loginSuccess(username);
             } else {
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+                loginFail();
             }
         }
     }
@@ -158,5 +160,9 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
+    }
+
+    private void loginFail() {
+        tvErrorMessage.setVisibility(View.VISIBLE);
     }
 }
