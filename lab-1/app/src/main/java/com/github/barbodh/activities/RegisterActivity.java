@@ -3,9 +3,7 @@ package com.github.barbodh.activities;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,11 +22,21 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+/**
+ * Activity for handling user registration.
+ * <p>
+ * Provides input fields for user details such as first name, last name,
+ * date of birth, username, email, and password. Includes validation
+ * for empty fields, email format, duplicate usernames, and password strength.
+ * <p>
+ * On successful registration, the user is redirected to {@link WelcomeActivity}.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
     // =========================
     // Widgets
     // =========================
+
     private EditText etFirstName;
     private EditText etLastName;
     private EditText etDob;
@@ -38,20 +46,31 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etConfirmPassword;
     private Button btnRegister;
     private TextView tvLoginLink;
-
     private Calendar myCalendar;
 
-    // Password Strength Regex Patterns
+    // =========================
+    // Password Strength Regex
+    // =========================
+
     private static final Pattern PASSWORD_HAS_UPPERCASE = Pattern.compile("[A-Z]");
     private static final Pattern PASSWORD_HAS_LOWERCASE = Pattern.compile("[a-z]");
     private static final Pattern PASSWORD_HAS_DIGIT = Pattern.compile("[0-9]");
-    private static final Pattern PASSWORD_HAS_SPECIAL_CHAR = Pattern.compile("[!@#$%^&*()_\\-+=\\[\\]{};':\"\\\\|,.<>/?~`]");
 
-
+    /**
+     * Regex pattern requiring at least one special character in password.
+     */
+    private static final Pattern PASSWORD_HAS_SPECIAL_CHAR =
+            Pattern.compile("[!@#$%^&*()_\\-+=\\[\\]{};':\"\\\\|,.<>/?~`]");
 
     // =========================
-    // Initializers
+    // Lifecycle
     // =========================
+
+    /**
+     * Called when the activity is created.
+     *
+     * @param savedInstanceState previously saved state of the activity, or {@code null}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +87,15 @@ public class RegisterActivity extends AppCompatActivity {
         setupListeners();
     }
 
+    // =========================
+    // Initialization
+    // =========================
+
+    /**
+     * Binds XML views to their corresponding fields.
+     * Also disables manual typing in the Date of Birth field
+     * to force using the date picker.
+     */
     private void initViews() {
         etFirstName = findViewById(R.id.et_first_name);
         etLastName = findViewById(R.id.et_last_name);
@@ -83,45 +111,40 @@ public class RegisterActivity extends AppCompatActivity {
         etDob.setClickable(true);
     }
 
+    /**
+     * Sets up listeners for button clicks and the date picker.
+     */
     private void setupListeners() {
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleRegister();
-            }
+        btnRegister.setOnClickListener(v -> handleRegister());
+
+        tvLoginLink.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        tvLoginLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         };
 
-        etDob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(RegisterActivity.this,
-                        dateSetListener,
-                        myCalendar.get(Calendar.YEAR),
-                        myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
+        etDob.setOnClickListener(v -> new DatePickerDialog(RegisterActivity.this,
+                dateSetListener,
+                myCalendar.get(Calendar.YEAR),
+                myCalendar.get(Calendar.MONTH),
+                myCalendar.get(Calendar.DAY_OF_MONTH)).show());
     }
 
+    // =========================
+    // Utilities
+    // =========================
+
+    /**
+     * Updates the Date of Birth field with the selected date
+     * formatted as {@code MM/dd/yyyy}.
+     */
     private void updateLabel() {
         String myFormat = "MM/dd/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -129,6 +152,12 @@ public class RegisterActivity extends AppCompatActivity {
         etDob.setError(null);
     }
 
+    /**
+     * Validates whether a password meets strength requirements.
+     *
+     * @param password the password string to validate
+     * @return {@code true} if password is strong, {@code false} otherwise
+     */
     private boolean isPasswordStrong(String password) {
         if (password.length() < 8) {
             etPassword.setError("Password must be at least 8 characters long.");
@@ -157,6 +186,14 @@ public class RegisterActivity extends AppCompatActivity {
     // =========================
     // Event Handlers
     // =========================
+
+    /**
+     * Handles the registration process.
+     * <p>
+     * Validates all input fields, checks for duplicate usernames,
+     * ensures passwords match, and verifies password strength.
+     * On success, redirects to {@link WelcomeActivity}.
+     */
     private void handleRegister() {
         String firstName = etFirstName.getText().toString().trim();
         String lastName = etLastName.getText().toString().trim();
@@ -224,6 +261,12 @@ public class RegisterActivity extends AppCompatActivity {
         registrationSuccess(username);
     }
 
+    /**
+     * Called after successful registration.
+     * Displays a toast message and navigates to {@link WelcomeActivity}.
+     *
+     * @param username the registered username to pass to the next activity
+     */
     public void registrationSuccess(String username) {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WelcomeActivity.class);

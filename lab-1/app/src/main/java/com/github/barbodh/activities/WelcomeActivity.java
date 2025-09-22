@@ -12,18 +12,23 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.github.barbodh.R;
 
+/**
+ * Activity displayed after a successful login or registration.
+ * <p>
+ * Retrieves the username passed through the {@link Intent}
+ * and displays a personalized welcome message to the user.
+ */
 public class WelcomeActivity extends AppCompatActivity {
 
     // =========================
-    // Widgets
+    // Lifecycle
     // =========================
 
-    private TextView tvWelcomeMessage;
-
-    // =========================
-    // Initializers
-    // =========================
-
+    /**
+     * Called when the activity is created.
+     *
+     * @param savedInstanceState previously saved state of the activity, or {@code null}
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +43,23 @@ public class WelcomeActivity extends AppCompatActivity {
         initViews();
     }
 
-    private void initViews() {
-        tvWelcomeMessage = findViewById(R.id.tv_welcome_message);
+    // =========================
+    // Initialization
+    // =========================
 
+    /**
+     * Initializes the welcome message view and sets its text
+     * based on the username passed via the launching {@link Intent}.
+     * <p>
+     * If no username is provided, the message will simply say "Welcome!".
+     */
+    private void initViews() {
+        TextView tvWelcomeMessage = findViewById(R.id.tv_welcome_message);
         Intent intent = getIntent();
-        String message = "Welcome " + intent.getStringExtra("username") + "!";
+        String username = intent.getStringExtra("username");
+        String message = username != null
+                ? "Welcome " + username + "!"
+                : "Welcome!";
         tvWelcomeMessage.setText(message);
     }
 }

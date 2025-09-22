@@ -20,6 +20,11 @@ import androidx.core.view.WindowInsetsCompat;
 import com.github.barbodh.R;
 import com.github.barbodh.utils.auth.CredentialManager;
 
+/**
+ * LoginActivity handles user authentication by providing a login form.
+ * It validates credentials, supports a "Remember Me" feature with SharedPreferences,
+ * and can skip login if the user previously chose to be remembered.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     // =========================
@@ -40,13 +45,19 @@ public class LoginActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "MyAppPrefs";
     private static final String KEY_USERNAME = "username";
-    private static final String KEY_PASSWORD = "password"; // Ideally shouldn't store password as plain text
+    private static final String KEY_PASSWORD = "password";
     private static final String KEY_REMEMBER = "remember";
 
     // =========================
     // Initializers
     // =========================
 
+    /**
+     * Called when the activity is first created.
+     * Initializes SharedPreferences, skips login if applicable, binds views, and sets listeners.
+     *
+     * @param savedInstanceState Saved activity state, if available
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         setupListeners();
     }
 
+    /**
+     * Skips the login screen if the user has previously selected "Remember Me".
+     * If stored credentials are valid, proceeds to login success.
+     */
     private void skipLoginIfApplicable() {
         boolean remember = prefs.getBoolean(KEY_REMEMBER, false);
         if (remember) {
@@ -74,6 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Binds the XML layout widgets to Java fields.
+     */
     private void initViews() {
         btnLogin = findViewById(R.id.btn_login);
         btnCancel = findViewById(R.id.btn_cancel);
@@ -83,12 +101,11 @@ public class LoginActivity extends AppCompatActivity {
         tvErrorMessage = findViewById(R.id.tv_error_message);
     }
 
+    /**
+     * Sets up listeners for buttons, checkboxes, and clickable text.
+     */
     private void setupListeners() {
         btnLogin.setOnClickListener(v -> handleLogin());
-        // TODO: This toast is used for debugging; remove later
-        btnLogin.setOnClickListener(v -> {
-            handleLogin();
-        });
 
         btnCancel.setOnClickListener(this::handleCancel);
 
@@ -112,6 +129,15 @@ public class LoginActivity extends AppCompatActivity {
     // Event Handlers
     // =========================
 
+    /**
+     * Handles login logic:
+     * <ul>
+     *   <li>Validates input fields</li>
+     *   <li>Validates credentials against {@link CredentialManager}</li>
+     *   <li>Saves or clears credentials based on "Remember Me"</li>
+     *   <li>Shows success or failure state</li>
+     * </ul>
+     */
     private void handleLogin() {
         String username = etUsername.getText().toString().trim();
         String password = etPassword.getText().toString();
@@ -146,6 +172,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the Cancel button click by clearing input fields.
+     *
+     * @param view The Cancel button
+     */
     private void handleCancel(View view) {
         etUsername.setText("");
         etPassword.setText("");
@@ -155,6 +186,12 @@ public class LoginActivity extends AppCompatActivity {
     // Utilities
     // =========================
 
+    /**
+     * Called on successful login.
+     * Displays a Toast and launches {@link WelcomeActivity}.
+     *
+     * @param username The logged-in username
+     */
     private void loginSuccess(String username) {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WelcomeActivity.class);
@@ -162,6 +199,10 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Called on failed login.
+     * Displays an error message TextView.
+     */
     private void loginFail() {
         tvErrorMessage.setVisibility(View.VISIBLE);
     }
