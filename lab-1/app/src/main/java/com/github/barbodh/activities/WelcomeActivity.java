@@ -42,7 +42,7 @@ public class WelcomeActivity extends AppCompatActivity {
         tvWelcomeMessage = findViewById(R.id.tv_welcome_message);
 
         Intent intent = getIntent();
-        String message = "Welcome " + intent.getStringExtra("username");
+        String message = "Welcome " + intent.getStringExtra("username") + "!";
         tvWelcomeMessage.setText(message);
     }
 }
