@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.github.barbodh.R;
+import com.github.barbodh.utils.auth.CredentialManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -182,6 +183,11 @@ public class RegisterActivity extends AppCompatActivity {
         }
         if (username.isEmpty()) {
             etUsername.setError("Username is required");
+            etUsername.requestFocus();
+            return;
+        }
+        if (CredentialManager.isDuplicateUsername(username)) {
+            etUsername.setError("This username is taken");
             etUsername.requestFocus();
             return;
         }

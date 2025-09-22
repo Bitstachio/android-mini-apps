@@ -17,6 +17,10 @@ public class CredentialManager {
         credentials.put(username, password);
     }
 
+    public static boolean isDuplicateUsername(String username) {
+        return credentials.containsKey(username);
+    }
+
     public static boolean validate(String username, String password) {
         if (credentials.containsKey(username)) {
             String storedPassword = credentials.get(username);
