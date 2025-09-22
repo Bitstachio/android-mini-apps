@@ -58,8 +58,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        skipLoginIfApplicable();
         initViews();
         setupListeners();
+    }
+
+    private void skipLoginIfApplicable() {
+        boolean remember = prefs.getBoolean(KEY_REMEMBER, false);
+        if (remember) {
+            String username = prefs.getString(KEY_USERNAME, "");
+            String password = prefs.getString(KEY_PASSWORD, "");
+            boolean result = CredentialManager.validate(username, password);
+            if (result) loginSuccess();
+        }
     }
 
     private void initViews() {
@@ -68,14 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         tvRegister = findViewById(R.id.tvRegister);
-
-        boolean remember = prefs.getBoolean(KEY_REMEMBER, false);
-        if (remember) {
-            etUsername.setText(prefs.getString(KEY_USERNAME, ""));
-            etPassword.setText(prefs.getString(KEY_PASSWORD, ""));
-            CheckBox checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
-            checkboxRememberMe.setChecked(true);
-        }
     }
 
     private void setupListeners() {
@@ -122,8 +125,6 @@ public class LoginActivity extends AppCompatActivity {
             );
 
             if (result) {
-                Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
-
                 CheckBox checkboxRememberMe = findViewById(R.id.checkboxRememberMe);
                 SharedPreferences.Editor editor = prefs.edit();
 
@@ -135,6 +136,8 @@ public class LoginActivity extends AppCompatActivity {
                     editor.clear(); // wipe stored credentials
                 }
                 editor.apply();
+
+                loginSuccess();
             } else {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
             }
@@ -144,5 +147,15 @@ public class LoginActivity extends AppCompatActivity {
     private void handleCancel(View view) {
         etUsername.setText("");
         etPassword.setText("");
+    }
+
+    // =========================
+    // Utilities
+    // =========================
+
+    public void loginSuccess() {
+        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
     }
 }
