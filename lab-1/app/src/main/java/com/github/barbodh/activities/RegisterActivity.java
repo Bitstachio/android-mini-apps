@@ -258,17 +258,18 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        registrationSuccess(username);
+        registrationSuccess(username, password);
     }
 
     /**
      * Called after successful registration.
      * Displays a toast message and navigates to {@link WelcomeActivity}.
      *
-     * @param username the registered username to pass to the next activity
+     * @param username the registered username to pass to {@code CredentialManager} and the next activity
+     * @param password the registered password to pass to {@code CredentialManager}
      */
-    public void registrationSuccess(String username) {
-        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+    public void registrationSuccess(String username, String password) {
+        CredentialManager.add(username, password);
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
