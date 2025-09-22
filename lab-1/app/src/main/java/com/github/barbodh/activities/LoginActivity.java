@@ -1,6 +1,7 @@
 package com.github.barbodh.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.github.barbodh.R;
+import com.github.barbodh.utils.auth.CredentialManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> handleLogin());
         // TODO: This toast is used for debugging; remove later
         btnLogin.setOnClickListener(v -> {
-            Toast.makeText(this, "Login button clicked", Toast.LENGTH_SHORT).show();
+            handleLogin();
         });
 
         btnCancel.setOnClickListener(this::handleCancel);
@@ -79,28 +81,22 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString();
 
         if (email.isEmpty()) {
-            etUsername.setError("Email is required");
+            etUsername.setError("Username is required");
         } else if (password.isEmpty()) {
             etPassword.setError("Password is required");
         } else {
-            // Call presenter, viewmodel, or API
+            boolean result = CredentialManager.validate(
+                    etUsername.getText().toString().trim(),
+                    etPassword.getText().toString().trim()
+            );
+
+            if (result) Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void handleCancel(View view) {
         etUsername.setText("");
         etPassword.setText("");
-    }
-
-    // =========================
-    // Validators
-    // =========================
-
-    private void validateUsername() {
-
-    }
-
-    private void validatePassword() {
-
     }
 }
