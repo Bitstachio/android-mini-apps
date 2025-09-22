@@ -215,6 +215,13 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        Toast.makeText(this, "Registration button clicked", Toast.LENGTH_SHORT).show();
+        registrationSuccess(username);
+    }
+
+    public void registrationSuccess(String username) {
+        Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
     }
 }

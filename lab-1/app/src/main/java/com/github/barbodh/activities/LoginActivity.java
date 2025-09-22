@@ -153,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
     // Utilities
     // =========================
 
-    public void loginSuccess(String username) {
+    private void loginSuccess(String username) {
         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("username", username);
