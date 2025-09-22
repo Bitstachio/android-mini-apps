@@ -2,6 +2,7 @@ package com.github.barbodh.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     // =========================
 
     private Button btnLogin;
+    private Button btnCancel;
     private EditText etUsername;
     private EditText etPassword;
     private TextView tvRegister;
@@ -47,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void initViews() {
         btnLogin = findViewById(R.id.btn_login);
+        btnCancel = findViewById(R.id.btn_cancel);
         etUsername = findViewById(R.id.et_username);
         etPassword = findViewById(R.id.et_password);
         tvRegister = findViewById(R.id.tvRegister);
@@ -58,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             Toast.makeText(this, "Login button clicked", Toast.LENGTH_SHORT).show();
         });
+
+        btnCancel.setOnClickListener(this::handleCancel);
 
         tvRegister.setOnClickListener(v -> {
             Intent intent = new Intent(this, RegisterActivity.class);
@@ -80,6 +85,11 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Call presenter, viewmodel, or API
         }
+    }
+
+    private void handleCancel(View view) {
+        etUsername.setText("");
+        etPassword.setText("");
     }
 
     // =========================
