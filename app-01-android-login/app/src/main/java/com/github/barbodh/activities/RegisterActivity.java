@@ -273,5 +273,6 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WelcomeActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
+        CredentialManager.add(username, password);
     }
 }
