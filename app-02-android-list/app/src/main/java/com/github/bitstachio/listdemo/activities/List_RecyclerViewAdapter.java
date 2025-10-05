@@ -1,6 +1,7 @@
 package com.github.bitstachio.listdemo.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +37,22 @@ public class List_RecyclerViewAdapter extends RecyclerView.Adapter<List_Recycler
 
     @Override
     public void onBindViewHolder(@NonNull List_RecyclerViewAdapter.ViewHolder holder, int position) {
+        ListModel item = listModels.get(position);
 
-        holder.tvTitle.setText(listModels.get(position).getTitle());
-        holder.tvDescription.setText(listModels.get(position).getDescription());
-        holder.imageView.setImageResource(listModels.get(position).getImage());
+        holder.tvTitle.setText(item.getTitle());
+        holder.tvDescription.setText(item.getDescription());
+        holder.imageView.setImageResource(item.getImage());
 
+        // handle click on this row and sends the relevant information to DetailsActivity class
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, DetailsActivity.class);
+            intent.putExtra("title", item.getTitle());
+            intent.putExtra("imageResId", item.getImage());
+            intent.putExtra("description", item.getDescription());
+            context.startActivity(intent);
+        });
     }
+
 
     @Override
     public int getItemCount() {
