@@ -25,6 +25,8 @@ public class ListActivity extends AppCompatActivity {
             return insets;
         });
 
+
+
         Button testButton = findViewById(R.id.test_button);
         testButton.setOnClickListener(v -> {
             Intent intent = new Intent(ListActivity.this, DetailsActivity.class);
