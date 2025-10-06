@@ -1,8 +1,6 @@
 package com.github.bitstachio.listdemo.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,13 +38,12 @@ public class ListActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
 
-        setUpListModels();
+        listModels = MockDatabase.getPlayers();
 
         List_RecyclerViewAdapter adapter = new List_RecyclerViewAdapter(this, listModels);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
 
 //        Button testButton = findViewById(R.id.test_button);
@@ -58,14 +55,5 @@ public class ListActivity extends AppCompatActivity {
 //            intent.putExtra("description", "This is a dummy description for testing purposes.");
 //            startActivity(intent);
 //        });
-    }
-
-    private void setUpListModels(){
-        String[] titles = getResources().getStringArray(R.array.titles);
-        String[] descriptions = getResources().getStringArray(R.array.descriptions);
-        for (int i = 0; i < titles.length; i++) {
-            listModels.add(new ListModel(titles[i], descriptions[i], listImages[i]));
-        }
-
     }
 }

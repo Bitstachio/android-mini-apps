@@ -2,28 +2,27 @@ package com.github.bitstachio.listdemo.activities;
 
 public class ListModel {
     int imageResId;
-    String title;
+    String name;
+    String position;
     String description;
 
 
-    public ListModel(String title, String description, int listImage) {
+    public ListModel(String name, String position, String description, int listImage) {
         this.imageResId = listImage;
-        this.title = title;
+        this.name = name;
+        this.position = position;
         this.description = description;
-
-
     }
-
 
     public int getImage() {
         return imageResId;
     }
 
     public String getTitle() {
-        return title;
+        return name;
     }
 
     public String getDescription() {
-        return description;
+        return position;
     }
 }
