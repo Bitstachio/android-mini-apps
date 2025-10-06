@@ -14,46 +14,53 @@ import com.github.bitstachio.listdemo.R;
 
 import java.util.ArrayList;
 
+/**
+ * Displays a scrollable list of {@link Player} items using a {@link RecyclerView}.
+ * <p>
+ * This activity retrieves player data from {@link MockDatabase}, initializes
+ * the adapter, and binds the data to the RecyclerView layout.
+ */
 public class ListActivity extends AppCompatActivity {
 
-    ArrayList<Player> listModels = new ArrayList<>();
+    private ArrayList<Player> listModels = new ArrayList<>();
 
-    int[] listImages = {R.drawable.number1, R.drawable.number2, R.drawable.number3,
+    /**
+     * Temporary image placeholders used for testing or default visuals.
+     */
+    private final int[] listImages = {
+            R.drawable.number1, R.drawable.number2, R.drawable.number3,
             R.drawable.number4, R.drawable.number5, R.drawable.number6,
             R.drawable.number7, R.drawable.number8, R.drawable.number9,
             R.drawable.number10, R.drawable.number11, R.drawable.number12,
-            R.drawable.number13, R.drawable.number14, R.drawable.number15};
+            R.drawable.number13, R.drawable.number14, R.drawable.number15
+    };
 
+    /**
+     * Initializes the activity, loads player data, and sets up the RecyclerView.
+     *
+     * @param savedInstanceState the saved instance state bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_list);
+
+        // Handle window insets for edge-to-edge layout compatibility
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-
         });
 
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
 
+        // Load player data from the mock database
         listModels = MockDatabase.getPlayers();
 
+        // Configure adapter and layout manager for the RecyclerView
         List_RecyclerViewAdapter adapter = new List_RecyclerViewAdapter(this, listModels);
-
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-//        Button testButton = findViewById(R.id.test_button);
-//        testButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(ListActivity.this, DetailsActivity.class);
-//            // putExtra for passing data to the DetailsActivity
-//            intent.putExtra("title", "Test Title");
-//            intent.putExtra("imageResId", R.drawable.ic_launcher_background);
-//            intent.putExtra("description", "This is a dummy description for testing purposes.");
-//            startActivity(intent);
-//        });
     }
 }

@@ -4,10 +4,23 @@ import com.github.bitstachio.listdemo.R;
 
 import java.util.ArrayList;
 
+/**
+ * A mock in-memory data source that provides sample {@link Player} objects.
+ * <p>
+ * This class simulates a simple database by preloading a static list of players,
+ * each containing detailed information such as name, position, description, and image resources.
+ * <p>
+ * Used primarily for demonstration and UI testing within {@link ListActivity}
+ * and {@link DetailsActivity}.
+ */
 public class MockDatabase {
 
+    /**
+     * Static list containing mock player data.
+     */
     private static final ArrayList<Player> players = new ArrayList<>();
 
+    // Populate the database with mock players when the class is loaded
     static {
         players.add(new Player(0, "Robert Sánchez", R.drawable.thumb_robert_sanchez, R.drawable.img_robert_sanchez, "Goalkeeper",
                 "Robert Sánchez is a commanding Spanish goalkeeper renowned for his sharp reflexes, aerial control, and calm distribution from the back. After developing at Brighton & Hove Albion, he joined Chelsea in 2023 to solidify the club’s defensive line. Sánchez’s height and communication make him an essential organizer in set-piece situations, while his confidence with the ball fits perfectly into Chelsea’s possession-based system."));
@@ -41,10 +54,21 @@ public class MockDatabase {
                 "Liam Delap is a physically imposing English striker recognized for his strength, pressing intensity, and eye for goal. After progressing through Manchester City’s academy and impressing on loan at various clubs, he joined Chelsea from Ipswich Town in 2025. Delap’s hold-up play and movement make him a reliable target man capable of leading the line effectively. His relentless energy and determination reflect Chelsea’s push for a more dynamic attacking style."));
     }
 
+    /**
+     * Returns the full list of players.
+     *
+     * @return an {@link ArrayList} containing all mock {@link Player} objects
+     */
     public static ArrayList<Player> getPlayers() {
         return players;
     }
 
+    /**
+     * Retrieves a specific player by their unique ID.
+     *
+     * @param id the player's identifier
+     * @return the {@link Player} with the matching ID, or {@code null} if not found
+     */
     public static Player getPlayerById(int id) {
         for (Player player : players) {
             if (player.id == id) return player;
