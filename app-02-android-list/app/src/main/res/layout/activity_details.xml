@@ -5,37 +5,62 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:paddingHorizontal="32dp"
+    android:paddingTop="32dp"
+    android:paddingBottom="40dp"
     tools:context=".activities.DetailsActivity">
 
     <ImageView
         android:id="@+id/detail_image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:importantForAccessibility="no"
+        android:layout_width="0dp"
+        android:layout_height="260dp"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="24dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:src="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/detail_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:paddingHorizontal="8dp"
         app:layout_constraintTop_toBottomOf="@id/detail_image"
-        tools:text="Title" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Cole Palmer" />
+
+    <TextView
+        android:id="@+id/detail_position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="?attr/colorAccent"
+        android:textStyle="italic"
+        android:paddingHorizontal="8dp"
+        app:layout_constraintTop_toBottomOf="@id/detail_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Attacking Midfielder" />
 
     <TextView
         android:id="@+id/detail_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:lineSpacingExtra="6dp"
+        android:textColor="@android:color/black"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/detail_position"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/detail_title"
-        tools:text="This is a sample description." />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Cole Palmer is an exceptionally creative English playmaker who excels in tight spaces and delivers decisive moments in attack..." />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

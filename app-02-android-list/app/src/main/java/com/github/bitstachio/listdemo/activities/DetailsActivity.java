@@ -49,6 +49,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         ImageView detailImage = findViewById(R.id.detail_image);
         TextView detailTitle = findViewById(R.id.detail_title);
+        TextView detailPosition = findViewById(R.id.detail_position);
         TextView detailDesc = findViewById(R.id.detail_desc);
 
         if (name != null) {
@@ -57,6 +58,10 @@ public class DetailsActivity extends AppCompatActivity {
 
         if (description != null) {
             detailDesc.setText(description);
+        }
+
+        if (detailPosition != null) {
+            detailPosition.setText(position);
         }
 
         if (imageResId != -1) {
