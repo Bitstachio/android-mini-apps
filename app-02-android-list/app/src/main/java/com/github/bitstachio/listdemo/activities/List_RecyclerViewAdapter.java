@@ -39,16 +39,16 @@ public class List_RecyclerViewAdapter extends RecyclerView.Adapter<List_Recycler
     public void onBindViewHolder(@NonNull List_RecyclerViewAdapter.ViewHolder holder, int position) {
         Player item = listModels.get(position);
 
-        holder.tvTitle.setText(item.getTitle());
-        holder.tvDescription.setText(item.getDescription());
-        holder.imageView.setImageResource(item.getImage());
+        holder.tvTitle.setText(item.getName());
+        holder.tvDescription.setText(item.getPosition());
+        holder.imageView.setImageResource(item.getThumbnailResId());
 
         // handle click on this row and sends the relevant information to DetailsActivity class
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("imageResId", item.getImage());
-            intent.putExtra("description", item.getDescription());
+            intent.putExtra("title", item.getName());
+            intent.putExtra("imageResId", item.getImageResId());
+            intent.putExtra("description", item.getPosition());
             context.startActivity(intent);
         });
     }

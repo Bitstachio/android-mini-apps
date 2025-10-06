@@ -2,12 +2,20 @@ package com.github.bitstachio.listdemo.activities;
 
 public class Player {
 
+    // =========================
+    // Fields
+    // =========================
+
     String name;
     String position;
     String description;
 
     int imageResId;
     int thumbnailResId;
+
+    // =========================
+    // Constructors
+    // =========================
 
     public Player(String name, int thumbnailResId, int imageResId, String position, String description) {
         this.name = name;
@@ -17,15 +25,27 @@ public class Player {
         this.description = description;
     }
 
-    public int getImage() {
-        return imageResId;
-    }
+    // =========================
+    // Getters
+    // =========================
 
-    public String getTitle() {
+    public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    public String getPosition() {
         return position;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getImageResId() {
+        return imageResId;
+    }
+
+    public int getThumbnailResId() {
+        return thumbnailResId;
     }
 }
