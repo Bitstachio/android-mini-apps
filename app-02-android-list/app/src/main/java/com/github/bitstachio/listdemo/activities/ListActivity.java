@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
 
-    ArrayList<ListModel> listModels = new ArrayList<>();
+    ArrayList<Player> listModels = new ArrayList<>();
 
     int[] listImages = {R.drawable.number1, R.drawable.number2, R.drawable.number3,
             R.drawable.number4, R.drawable.number5, R.drawable.number6,

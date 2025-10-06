@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class List_RecyclerViewAdapter extends RecyclerView.Adapter<List_RecyclerViewAdapter.ViewHolder> {
     Context context;
-    ArrayList<ListModel> listModels;
+    ArrayList<Player> listModels;
 
-    public List_RecyclerViewAdapter(Context context, ArrayList<ListModel> listModels){
+    public List_RecyclerViewAdapter(Context context, ArrayList<Player> listModels){
         this.context = context;
         this.listModels = listModels;
 
@@ -37,7 +37,7 @@ public class List_RecyclerViewAdapter extends RecyclerView.Adapter<List_Recycler
 
     @Override
     public void onBindViewHolder(@NonNull List_RecyclerViewAdapter.ViewHolder holder, int position) {
-        ListModel item = listModels.get(position);
+        Player item = listModels.get(position);
 
         holder.tvTitle.setText(item.getTitle());
         holder.tvDescription.setText(item.getDescription());

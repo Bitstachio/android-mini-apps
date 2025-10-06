@@ -1,15 +1,18 @@
 package com.github.bitstachio.listdemo.activities;
 
-public class ListModel {
-    int imageResId;
+public class Player {
+
     String name;
     String position;
     String description;
 
+    int imageResId;
+    int thumbnailResId;
 
-    public ListModel(String name, String position, String description, int listImage) {
-        this.imageResId = listImage;
+    public Player(String name, int thumbnailResId, int imageResId, String position, String description) {
         this.name = name;
+        this.thumbnailResId = thumbnailResId;
+        this.imageResId = imageResId;
         this.position = position;
         this.description = description;
     }
