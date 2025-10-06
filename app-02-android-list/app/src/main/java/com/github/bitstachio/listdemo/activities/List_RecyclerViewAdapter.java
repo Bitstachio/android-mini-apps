@@ -46,9 +46,7 @@ public class List_RecyclerViewAdapter extends RecyclerView.Adapter<List_Recycler
         // handle click on this row and sends the relevant information to DetailsActivity class
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailsActivity.class);
-            intent.putExtra("title", item.getName());
-            intent.putExtra("imageResId", item.getImageResId());
-            intent.putExtra("description", item.getPosition());
+            intent.putExtra("id", item.getId());
             context.startActivity(intent);
         });
     }

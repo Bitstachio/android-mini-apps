@@ -31,17 +31,28 @@ public class DetailsActivity extends AppCompatActivity {
         // Should we use Glide or Picasso or setImageURI()?
 
         Intent intent = getIntent();
-        // getExtra for getting data from the ListActivity
-        String title = intent.getStringExtra("title");
-        int imageResId = intent.getIntExtra("imageResId", -1);
-        String description = intent.getStringExtra("description");
+
+        int id = intent.getIntExtra("id", 0);
+        Player player = MockDatabase.getPlayerById(id);
+
+        String name = "";
+        String position = "";
+        String description = "";
+        int imageResId = -1;
+
+        if (player != null) {
+            name = player.getName();
+            position = player.getPosition();
+            description = player.getDescription();
+            imageResId = player.getImageResId();
+        }
 
         ImageView detailImage = findViewById(R.id.detail_image);
         TextView detailTitle = findViewById(R.id.detail_title);
         TextView detailDesc = findViewById(R.id.detail_desc);
 
-        if (title != null) {
-            detailTitle.setText(title);
+        if (name != null) {
+            detailTitle.setText(name);
         }
 
         if (description != null) {
