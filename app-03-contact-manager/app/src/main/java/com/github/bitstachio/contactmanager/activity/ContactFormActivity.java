@@ -1,4 +1,4 @@
-package com.github.bitstachio.contactmanager.activities;
+package com.github.bitstachio.contactmanager.activity;
 
 import android.os.Bundle;
 

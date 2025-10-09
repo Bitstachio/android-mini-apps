@@ -12,13 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContactManager">
         <activity
-            android:name=".activities.ContactFormActivity"
+            android:name=".activity.ContactFormActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ContactDetailsActivity"
+            android:name=".activity.ContactDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ContactsListActivity"
+            android:name=".activity.ContactsListActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ContactManager">
