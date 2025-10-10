@@ -1,6 +1,9 @@
 package com.github.bitstachio.contactmanager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,5 +33,28 @@ public class ContactsListActivity extends AppCompatActivity {
         });
 
         contacts = MockDatabase.getContacts();
+
+        // This is for testing purposes only
+        Button detailsButton = findViewById(R.id.detailsButton);
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int aliceIndex = -1;
+                for (int i = 0; i < contacts.size(); i++) {
+                    Contact contact = contacts.get(i);
+                    // TODO: replace with id-based lookup
+                    if (contact.getFirstName().equals("Alice") && contact.getLastName().equals("Johnson")) {
+                        aliceIndex = i;
+                        break;
+                    }
+                }
+
+                if (aliceIndex != -1) {
+                    Intent intent = new Intent(ContactsListActivity.this, ContactDetailsActivity.class);
+                    intent.putExtra(ContactDetailsActivity.EXTRA_CONTACT_INDEX, aliceIndex);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 }
