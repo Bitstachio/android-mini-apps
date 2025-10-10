@@ -62,7 +62,7 @@ public class ContactsListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_add_contact) {
             Intent intent = new Intent(this, ContactFormActivity.class);
             startActivity(intent);

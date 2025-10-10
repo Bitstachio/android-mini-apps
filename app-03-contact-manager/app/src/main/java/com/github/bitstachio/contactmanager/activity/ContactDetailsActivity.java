@@ -1,6 +1,10 @@
 package com.github.bitstachio.contactmanager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.github.bitstachio.contactmanager.R;
 import com.github.bitstachio.contactmanager.db.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class ContactDetailsActivity extends AppCompatActivity {
 
@@ -27,6 +32,9 @@ public class ContactDetailsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Navigate to previous activity
 
         int contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
         if (contactIndex == -1) {
@@ -48,5 +56,20 @@ public class ContactDetailsActivity extends AppCompatActivity {
         emailTextView.setText(contact.getEmail());
         birthDateTextView.setText(contact.getBirthday());
         notesTextView.setText(contact.getNotes());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_contact_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
