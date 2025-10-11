@@ -46,6 +46,17 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
         Contact contact = MockDatabase.getContacts().get(contactIndex);
 
+        String firstName = contact.getFirstName();
+        String lastName = contact.getLastName();
+        String initials = "";
+        if (firstName != null && !firstName.isEmpty()) {
+            initials += firstName.charAt(0);
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            initials += lastName.charAt(0);
+        }
+        getSupportActionBar().setTitle(initials.toUpperCase());
+
         TextView nameTextView = findViewById(R.id.nameTextView);
         TextView phoneTextView = findViewById(R.id.phoneTextView);
         TextView emailTextView = findViewById(R.id.emailTextView);
