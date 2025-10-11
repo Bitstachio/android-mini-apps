@@ -21,6 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 public class ContactDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_CONTACT_INDEX = "contact_index";
+    private int contactIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Navigate to previous activity
 
-        int contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
+        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
         if (contactIndex == -1) {
             // TODO: What should be displayed?
             finish();
@@ -68,6 +69,11 @@ public class ContactDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_edit_contact) {
+            Intent intent = new Intent(this, ContactFormActivity.class);
+            intent.putExtra(ContactFormActivity.EXTRA_CONTACT_INDEX, contactIndex);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

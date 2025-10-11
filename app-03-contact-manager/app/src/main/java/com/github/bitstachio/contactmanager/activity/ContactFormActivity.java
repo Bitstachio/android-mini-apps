@@ -14,6 +14,10 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 public class ContactFormActivity extends AppCompatActivity {
 
+    public static final String EXTRA_CONTACT_INDEX = "contact_index";
+
+    private int contactIndex = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +34,21 @@ public class ContactFormActivity extends AppCompatActivity {
         EditText notesEditText = findViewById(R.id.notesEditText);
         Button saveButton = findViewById(R.id.saveButton);
 
+        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
+
+        if (contactIndex != -1) {
+            getSupportActionBar().setTitle("Edit Contact");
+            Contact contact = MockDatabase.getContacts().get(contactIndex);
+            firstNameEditText.setText(contact.getFirstName());
+            lastNameEditText.setText(contact.getLastName());
+            phoneEditText.setText(contact.getPhone());
+            emailEditText.setText(contact.getEmail());
+            birthDateEditText.setText(contact.getBirthday());
+            notesEditText.setText(contact.getNotes());
+        } else {
+            getSupportActionBar().setTitle("New Contact");
+        }
+
         saveButton.setOnClickListener(v -> {
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
@@ -39,7 +58,12 @@ public class ContactFormActivity extends AppCompatActivity {
             String notes = notesEditText.getText().toString();
 
             Contact contact = new Contact(firstName, lastName, phone, email, birthDate, notes);
-//            MockDatabase.addContact(contact);
+
+            if (contactIndex != -1) {
+//                MockDatabase.updateContact(contactIndex, contact);
+            } else {
+//                MockDatabase.addContact(contact);
+            }
 
             finish();
         });
