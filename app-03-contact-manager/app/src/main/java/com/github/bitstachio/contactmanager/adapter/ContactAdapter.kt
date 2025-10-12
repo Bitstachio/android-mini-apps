@@ -30,9 +30,9 @@ class ContactAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val contactDb: Contact = data[position]
-        holder.name.text = contactDb.firstName
-        holder.phone.text = contactDb.phone
+        val contactDb = data[position]
+        holder.name.text = contactDb.getFirstName()
+        holder.phone.text = contactDb.getPhone()
     }
 
     override fun getItemCount(): Int {
