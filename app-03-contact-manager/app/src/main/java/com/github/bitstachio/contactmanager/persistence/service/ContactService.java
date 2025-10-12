@@ -2,15 +2,12 @@ package com.github.bitstachio.contactmanager.persistence.service;
 
 import android.content.Context;
 
-import androidx.room.RoomDatabase;
-
 import com.github.bitstachio.contactmanager.model.Contact;
 import com.github.bitstachio.contactmanager.persistence.IContactDao;
 import com.github.bitstachio.contactmanager.persistence.PersistenceStrategy;
 import com.github.bitstachio.contactmanager.persistence.room.dao.IRoomContactDao;
 import com.github.bitstachio.contactmanager.persistence.room.database.RoomDatabaseProvider;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ContactService {
