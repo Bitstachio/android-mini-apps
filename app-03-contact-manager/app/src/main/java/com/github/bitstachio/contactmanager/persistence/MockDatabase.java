@@ -1,4 +1,4 @@
-package com.github.bitstachio.contactmanager.db;
+package com.github.bitstachio.contactmanager.persistence;
 
 import com.github.bitstachio.contactmanager.model.Contact;
 
