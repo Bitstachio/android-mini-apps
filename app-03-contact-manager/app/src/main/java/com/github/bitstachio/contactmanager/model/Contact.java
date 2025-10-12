@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Contact {
-    private final String firstName;
-    private final String lastName;
-    private final String phone;
-    private final String email;
-    private final String birthday;
-    private final String notes;
+    public String firstName;
+    public String lastName;
+    public String phone;
+    public String email;
+    public String birthday;
+    public String notes;
 }
