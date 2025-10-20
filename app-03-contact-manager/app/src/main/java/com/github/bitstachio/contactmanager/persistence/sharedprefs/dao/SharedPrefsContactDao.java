@@ -74,7 +74,8 @@ public class SharedPrefsContactDao implements IContactDao {
                 contact.getPhone(),
                 contact.getEmail(),
                 contact.getBirthday(),
-                contact.getNotes()
+                contact.getNotes(),
+                false
         );
 
         contacts.add(newContact);

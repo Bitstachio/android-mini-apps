@@ -63,7 +63,7 @@ public class ContactFormActivity extends AppCompatActivity {
             String birthDate = birthDateEditText.getText().toString();
             String notes = notesEditText.getText().toString();
 
-            Contact contact = new Contact(0, firstName, lastName, phone, email, birthDate, notes);
+            Contact contact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, true);
 
             if (contactIndex != -1) {
 //                MockDatabase.updateContact(contactIndex, contact);

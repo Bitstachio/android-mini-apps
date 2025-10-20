@@ -16,4 +16,5 @@ public class Contact {
     private final String email;
     private final String birthday;
     private final String notes;
+    private final boolean isSqlite;
 }
