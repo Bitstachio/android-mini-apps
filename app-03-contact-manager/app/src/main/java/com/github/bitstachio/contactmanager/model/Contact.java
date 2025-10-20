@@ -3,11 +3,13 @@ package com.github.bitstachio.contactmanager.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 @Entity
 @Data
-public class Contact {
+public class Contact implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private final int id;
     private final String firstName;

@@ -16,9 +16,15 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ItemViewHolder> {
 
     private final List<Contact> data;
+    private final OnItemClickListener listener;
 
-    public ContactAdapter(List<Contact> data) {
+    public interface OnItemClickListener {
+        void onItemClick(Contact contact);
+    }
+
+    public ContactAdapter(List<Contact> data, OnItemClickListener listener) {
         this.data = data;
+        this.listener = listener;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -29,6 +35,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ItemView
             super(itemView);
             name = itemView.findViewById(R.id.textViewName);
             phone = itemView.findViewById(R.id.textViewPhone);
+        }
+
+        public void bind(Contact contact, OnItemClickListener listener) {
+            name.setText(contact.getFirstName() + " " + contact.getLastName());
+            phone.setText(contact.getPhone());
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) listener.onItemClick(contact);
+            });
         }
     }
 
@@ -43,8 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ItemView
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Contact contactDb = data.get(position);
-        holder.name.setText(contactDb.getFirstName());
-        holder.phone.setText(contactDb.getPhone());
+        holder.bind(contactDb, listener);
     }
 
     @Override

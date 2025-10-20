@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,9 +51,12 @@ public class ContactsListActivity extends AppCompatActivity {
             List<Contact> contacts = new ArrayList<>(contactService.getAll(PersistenceStrategy.ROOM));
             contacts.addAll(contactService.getAll(PersistenceStrategy.SHARED_PREFS));
 
-            // Update RecyclerView on the main thread
             runOnUiThread(() -> {
-                adapter = new ContactAdapter(contacts);
+                adapter = new ContactAdapter(contacts, contact -> {
+                    Intent intent = new Intent(ContactsListActivity.this, ContactDetailsActivity.class);
+                    intent.putExtra("contact", contact);
+                    startActivity(intent);
+                });
                 recyclerView.setAdapter(adapter);
             });
         });

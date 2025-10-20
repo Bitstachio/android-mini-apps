@@ -15,6 +15,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.github.bitstachio.contactmanager.R;
 import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
+import com.github.bitstachio.contactmanager.persistence.PersistenceStrategy;
+import com.github.bitstachio.contactmanager.persistence.service.ContactService;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ContactDetailsActivity extends AppCompatActivity {
@@ -36,14 +38,17 @@ public class ContactDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Navigate to previous activity
 
-        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
+        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, 0);
         if (contactIndex == -1) {
-            // TODO: What should be displayed?
             finish();
             return;
         }
 
-        Contact contact = MockDatabase.getContacts().get(contactIndex);
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+
+        if (contact == null) {
+            contact = MockDatabase.getEmpty();
+        }
 
         String firstName = contact.getFirstName();
         String lastName = contact.getLastName();
