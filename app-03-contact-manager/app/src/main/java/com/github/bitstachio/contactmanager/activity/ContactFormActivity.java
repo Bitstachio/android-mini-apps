@@ -69,7 +69,8 @@ public class ContactFormActivity extends AppCompatActivity {
 //                MockDatabase.updateContact(contactIndex, contact);
             } else {
                 new Thread(() -> {
-                    contactService.insert(PersistenceStrategy.ROOM, contact);
+//                    contactService.insert(PersistenceStrategy.ROOM, contact);
+                    contactService.insert(PersistenceStrategy.SHARED_PREFS, contact);
                 }).start();
             }
 
