@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.bitstachio.contactmanager.R;
 import com.github.bitstachio.contactmanager.adapter.ContactAdapter;
-import com.github.bitstachio.contactmanager.db.MockDatabase;
+import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
 
 import java.util.List;
