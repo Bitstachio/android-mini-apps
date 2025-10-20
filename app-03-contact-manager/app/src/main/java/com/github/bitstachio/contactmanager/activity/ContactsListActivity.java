@@ -59,6 +59,13 @@ public class ContactsListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Reload contacts every time the activity comes to foreground
+        loadContacts();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_contacts_list, menu);
         return true;
