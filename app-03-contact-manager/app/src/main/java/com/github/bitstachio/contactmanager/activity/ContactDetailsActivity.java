@@ -38,13 +38,13 @@ public class ContactDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Navigate to previous activity
 
-        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, 0);
-        if (contactIndex == -1) {
+        contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+
+        if (contact == null && contactIndex == -1) {
             finish();
             return;
         }
-
-        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
 
         if (contact == null) {
             contact = MockDatabase.getEmpty();
