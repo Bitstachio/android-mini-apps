@@ -12,35 +12,50 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.bitstachio.contactmanager.R;
 import com.github.bitstachio.contactmanager.adapter.ContactAdapter;
-import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
+import com.github.bitstachio.contactmanager.persistence.PersistenceStrategy;
+import com.github.bitstachio.contactmanager.persistence.service.ContactService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ContactsListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
+    private ContactService contactService;
+    private Executor executor = Executors.newSingleThreadExecutor(); // Background thread
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
 
-        // If your layout has a Toolbar with id=toolbar, keep these two lines.
-        // Otherwise remove them or ensure the id exists.
-         Toolbar toolbar = findViewById(R.id.toolbar);
-         setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         recyclerView = findViewById(R.id.mRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Pull data from your mock DB
-        List<Contact> contacts = MockDatabase.getContacts();
+        contactService = new ContactService(this);
 
-        // Set adapter
-        adapter = new ContactAdapter(contacts);
-        recyclerView.setAdapter(adapter);
+        loadContacts(); // Load contacts off the main thread
+    }
+
+    private void loadContacts() {
+        executor.execute(() -> {
+            // Fetch contacts from Room and SharedPreferences
+            List<Contact> contacts = new ArrayList<>(contactService.getAll(PersistenceStrategy.ROOM));
+            contacts.addAll(contactService.getAll(PersistenceStrategy.SHARED_PREFS));
+
+            // Update RecyclerView on the main thread
+            runOnUiThread(() -> {
+                adapter = new ContactAdapter(contacts);
+                recyclerView.setAdapter(adapter);
+            });
+        });
     }
 
     @Override
@@ -60,7 +75,4 @@ public class ContactsListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    // DELETE this; it’s not needed when using DB:
-    // private void setUpContactModels() { ... }
 }
