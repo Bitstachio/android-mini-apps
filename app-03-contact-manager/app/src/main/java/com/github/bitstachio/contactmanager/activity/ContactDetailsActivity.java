@@ -3,7 +3,6 @@ package com.github.bitstachio.contactmanager.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -14,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.github.bitstachio.contactmanager.R;
-import com.github.bitstachio.contactmanager.db.MockDatabase;
+import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
 import com.google.android.material.appbar.MaterialToolbar;
 

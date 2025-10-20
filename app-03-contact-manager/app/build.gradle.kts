@@ -62,4 +62,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.gson)
 }

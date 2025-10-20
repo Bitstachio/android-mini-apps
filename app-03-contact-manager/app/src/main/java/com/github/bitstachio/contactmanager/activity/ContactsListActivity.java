@@ -7,12 +7,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.github.bitstachio.contactmanager.R;
-import com.github.bitstachio.contactmanager.db.MockDatabase;
+import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
 
 import java.util.ArrayList;
