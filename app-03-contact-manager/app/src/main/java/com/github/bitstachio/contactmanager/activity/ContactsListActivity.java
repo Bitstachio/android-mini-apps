@@ -1,6 +1,10 @@
 package com.github.bitstachio.contactmanager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +41,24 @@ public class ContactsListActivity extends AppCompatActivity {
         // Set adapter
         adapter = new ContactAdapter(contacts);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_contacts_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_add_contact) {
+            // Open the new contact page
+            Intent intent = new Intent(this, ContactFormActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // DELETE this; it’s not needed when using DB:
