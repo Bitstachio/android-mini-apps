@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,14 +64,18 @@ public class ContactFormActivity extends AppCompatActivity {
             String birthDate = birthDateEditText.getText().toString();
             String notes = notesEditText.getText().toString();
 
-            Contact contact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, true);
+            // Determine storage method
+            RadioGroup storageMethodRadioGroup = findViewById(R.id.storageMethodRadioGroup);
+            int selectedId = storageMethodRadioGroup.getCheckedRadioButtonId();
+            boolean isSqlite = selectedId == R.id.sqliteRadioButton;
+            Contact contact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, isSqlite);
 
             if (contactIndex != -1) {
 //                MockDatabase.updateContact(contactIndex, contact);
             } else {
                 new Thread(() -> {
-//                    contactService.insert(PersistenceStrategy.ROOM, contact);
-                    contactService.insert(PersistenceStrategy.SHARED_PREFS, contact);
+                    if (isSqlite) contactService.insert(PersistenceStrategy.ROOM, contact);
+                    else contactService.insert(PersistenceStrategy.SHARED_PREFS, contact);
                 }).start();
             }
 
