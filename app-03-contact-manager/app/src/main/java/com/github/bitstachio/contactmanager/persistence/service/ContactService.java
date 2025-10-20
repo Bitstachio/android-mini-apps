@@ -1,6 +1,7 @@
 package com.github.bitstachio.contactmanager.persistence.service;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.github.bitstachio.contactmanager.model.Contact;
 import com.github.bitstachio.contactmanager.persistence.IContactDao;
@@ -33,6 +34,7 @@ public class ContactService {
     }
 
     public long insert(PersistenceStrategy strategy, Contact contact) {
+        Log.d("ContactService", "Inserting contact via Room...");
         return dispatchDao(strategy).insert(contact);
     }
 

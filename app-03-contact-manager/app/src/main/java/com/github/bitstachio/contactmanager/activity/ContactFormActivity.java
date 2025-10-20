@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.bitstachio.contactmanager.R;
 import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
+import com.github.bitstachio.contactmanager.persistence.PersistenceStrategy;
+import com.github.bitstachio.contactmanager.persistence.service.ContactService;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class ContactFormActivity extends AppCompatActivity {
@@ -49,6 +52,9 @@ public class ContactFormActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("New Contact");
         }
 
+        // TODO: Temporary service initialization
+        ContactService contactService = new ContactService(this);
+
         saveButton.setOnClickListener(v -> {
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
@@ -62,7 +68,9 @@ public class ContactFormActivity extends AppCompatActivity {
             if (contactIndex != -1) {
 //                MockDatabase.updateContact(contactIndex, contact);
             } else {
-//                MockDatabase.addContact(contact);
+                new Thread(() -> {
+                    contactService.insert(PersistenceStrategy.ROOM, contact);
+                }).start();
             }
 
             finish();
