@@ -62,35 +62,77 @@ public class ContactFormActivity extends AppCompatActivity {
         ContactService contactService = new ContactService(this);
 
         saveButton.setOnClickListener(v -> {
-            String firstName = firstNameEditText.getText().toString();
-            String lastName = lastNameEditText.getText().toString();
-            String phone = phoneEditText.getText().toString();
-            String email = emailEditText.getText().toString();
-            String birthDate = birthDateEditText.getText().toString();
-            String notes = notesEditText.getText().toString();
+            String firstName = firstNameEditText.getText().toString().trim();
+            String lastName = lastNameEditText.getText().toString().trim();
+            String phone = phoneEditText.getText().toString().trim();
+            String email = emailEditText.getText().toString().trim();
+            String birthDate = birthDateEditText.getText().toString().trim();
+            String notes = notesEditText.getText().toString().trim();
 
-            // Determine storage method
+            if (firstName.isEmpty()) {
+                firstNameEditText.setError("First name is required");
+                firstNameEditText.requestFocus();
+                return;
+            }
+
+            if (phone.isEmpty()) {
+                phoneEditText.setError("Phone number is required");
+                phoneEditText.requestFocus();
+                return;
+            }
+
+            if (!email.isEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                emailEditText.setError("Invalid email address");
+                emailEditText.requestFocus();
+                return;
+            }
+
+            if (!birthDate.isEmpty() && !birthDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                birthDateEditText.setError("Use format: YYYY-MM-DD");
+                birthDateEditText.requestFocus();
+                return;
+            }
+
             RadioGroup storageMethodRadioGroup = findViewById(R.id.storageMethodRadioGroup);
             int selectedId = storageMethodRadioGroup.getCheckedRadioButtonId();
             boolean isSqlite = contact == null ? selectedId == R.id.sqliteRadioButton : contact.isSqlite();
-            Contact newContact = new Contact(contact == null ? -1 : contact.getId(), firstName, lastName, phone, email, birthDate, notes, isSqlite);
 
-            if (contact != null) {
-                new Thread(() -> {
-                    PersistenceStrategy strategy = newContact.isSqlite() ? PersistenceStrategy.ROOM : PersistenceStrategy.SHARED_PREFS;
-                    contactService.update(strategy, newContact);
-                }).start();
-            } else {
-                new Thread(() -> {
-                    if (isSqlite) contactService.insert(PersistenceStrategy.ROOM, newContact);
-                    else contactService.insert(PersistenceStrategy.SHARED_PREFS, newContact);
-                }).start();
-            }
+            Contact newContact = new Contact(
+                    contact == null ? -1 : contact.getId(),
+                    firstName,
+                    lastName,
+                    phone,
+                    email,
+                    birthDate,
+                    notes,
+                    isSqlite
+            );
 
-            Intent intent = new Intent(this, ContactsListActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+            new Thread(() -> {
+                try {
+                    PersistenceStrategy strategy = newContact.isSqlite()
+                            ? PersistenceStrategy.ROOM
+                            : PersistenceStrategy.SHARED_PREFS;
+
+                    if (contact != null) {
+                        contactService.update(strategy, newContact);
+                    } else {
+                        contactService.insert(strategy, newContact);
+                    }
+
+                    // Back to main thread after successful save
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(this, ContactsListActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    });
+
+                } catch (Exception e) {
+                    Log.e("ContactForm", "Error saving contact", e);
+                }
+            }).start();
+
         });
     }
 
