@@ -1,5 +1,6 @@
 package com.github.bitstachio.contactmanager.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -71,11 +72,14 @@ public class ContactFormActivity extends AppCompatActivity {
             // Determine storage method
             RadioGroup storageMethodRadioGroup = findViewById(R.id.storageMethodRadioGroup);
             int selectedId = storageMethodRadioGroup.getCheckedRadioButtonId();
-            boolean isSqlite = selectedId == R.id.sqliteRadioButton;
-            Contact newContact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, isSqlite);
+            boolean isSqlite = contact == null ? selectedId == R.id.sqliteRadioButton : contact.isSqlite();
+            Contact newContact = new Contact(contact == null ? -1 : contact.getId(), firstName, lastName, phone, email, birthDate, notes, isSqlite);
 
-            if (contactIndex != -1) {
-//                MockDatabase.updateContact(contactIndex, contact);
+            if (contact != null) {
+                new Thread(() -> {
+                    PersistenceStrategy strategy = newContact.isSqlite() ? PersistenceStrategy.ROOM : PersistenceStrategy.SHARED_PREFS;
+                    contactService.update(strategy, newContact);
+                }).start();
             } else {
                 new Thread(() -> {
                     if (isSqlite) contactService.insert(PersistenceStrategy.ROOM, newContact);
@@ -83,6 +87,9 @@ public class ContactFormActivity extends AppCompatActivity {
                 }).start();
             }
 
+            Intent intent = new Intent(this, ContactsListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             finish();
         });
     }
