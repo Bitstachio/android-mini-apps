@@ -92,6 +92,23 @@ public class ContactDetailsActivity extends AppCompatActivity {
             intent.putExtra("contact", contact);
             startActivity(intent);
             return true;
+        } else if (item.getItemId() == R.id.action_delete) {
+            new Thread(() -> {
+                ContactService contactService = new ContactService(this);
+                PersistenceStrategy strategy = contact.isSqlite()
+                        ? PersistenceStrategy.ROOM
+                        : PersistenceStrategy.SHARED_PREFS;
+                contactService.delete(strategy, contact);
+
+                runOnUiThread(() -> {
+                    Intent intent = new Intent(this, ContactsListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                });
+            }).start();
+
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
