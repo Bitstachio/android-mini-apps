@@ -112,11 +112,13 @@
                         app:cardUseCompatPadding="true">
 
                         <LinearLayout
+                            android:id="@+id/ll_storage_method"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:paddingHorizontal="24dp"
-                            android:paddingVertical="18dp">
+                            android:paddingVertical="18dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="wrap_content"

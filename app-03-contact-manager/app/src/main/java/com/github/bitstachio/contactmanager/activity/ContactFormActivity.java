@@ -3,6 +3,7 @@ package com.github.bitstachio.contactmanager.activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -52,6 +53,8 @@ public class ContactFormActivity extends AppCompatActivity {
             notesEditText.setText(contact.getNotes());
         } else {
             getSupportActionBar().setTitle("New Contact");
+            View view = findViewById(R.id.ll_storage_method);
+            view.setVisibility(View.VISIBLE);
         }
 
         // TODO: Temporary service initialization
