@@ -1,16 +1,15 @@
 package com.github.bitstachio.contactmanager.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.bitstachio.contactmanager.R;
-import com.github.bitstachio.contactmanager.persistence.MockDatabase;
 import com.github.bitstachio.contactmanager.model.Contact;
 import com.github.bitstachio.contactmanager.persistence.PersistenceStrategy;
 import com.github.bitstachio.contactmanager.persistence.service.ContactService;
@@ -39,10 +38,12 @@ public class ContactFormActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.saveButton);
 
         contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
+        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
 
-        if (contactIndex != -1) {
+        Log.d("NewContactForm", contact != null ? contact.toString() : "NULL");
+
+        if (contact != null) {
             getSupportActionBar().setTitle("Edit Contact");
-            Contact contact = MockDatabase.getContacts().get(contactIndex);
             firstNameEditText.setText(contact.getFirstName());
             lastNameEditText.setText(contact.getLastName());
             phoneEditText.setText(contact.getPhone());
@@ -68,14 +69,14 @@ public class ContactFormActivity extends AppCompatActivity {
             RadioGroup storageMethodRadioGroup = findViewById(R.id.storageMethodRadioGroup);
             int selectedId = storageMethodRadioGroup.getCheckedRadioButtonId();
             boolean isSqlite = selectedId == R.id.sqliteRadioButton;
-            Contact contact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, isSqlite);
+            Contact newContact = new Contact(0, firstName, lastName, phone, email, birthDate, notes, isSqlite);
 
             if (contactIndex != -1) {
 //                MockDatabase.updateContact(contactIndex, contact);
             } else {
                 new Thread(() -> {
-                    if (isSqlite) contactService.insert(PersistenceStrategy.ROOM, contact);
-                    else contactService.insert(PersistenceStrategy.SHARED_PREFS, contact);
+                    if (isSqlite) contactService.insert(PersistenceStrategy.ROOM, newContact);
+                    else contactService.insert(PersistenceStrategy.SHARED_PREFS, newContact);
                 }).start();
             }
 

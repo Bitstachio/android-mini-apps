@@ -23,6 +23,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_CONTACT_INDEX = "contact_index";
     private int contactIndex;
+    private Contact contact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Navigate to previous activity
 
         contactIndex = getIntent().getIntExtra(EXTRA_CONTACT_INDEX, -1);
-        Contact contact = (Contact) getIntent().getSerializableExtra("contact");
+        contact = (Contact) getIntent().getSerializableExtra("contact");
 
         if (contact == null && contactIndex == -1) {
             finish();
@@ -88,6 +89,7 @@ public class ContactDetailsActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.action_edit_contact) {
             Intent intent = new Intent(this, ContactFormActivity.class);
             intent.putExtra(ContactFormActivity.EXTRA_CONTACT_INDEX, contactIndex);
+            intent.putExtra("contact", contact);
             startActivity(intent);
             return true;
         }

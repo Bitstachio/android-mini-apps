@@ -9,6 +9,8 @@ import lombok.Data;
 
 @Entity
 @Data
+// TODO: Implementing Serializable is a hacky solution
+// Consider removing it and only pass contact ID between activities
 public class Contact implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private final int id;
