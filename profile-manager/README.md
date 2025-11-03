@@ -16,6 +16,6 @@ This separation of concerns makes the codebase more organized, scalable, and eas
 
 ## Group Members and Contribution
 
-*   **Barbod Habibi:** Implementing Model 
-*   **Mehrshad Farahbakhsh:** Implementing View
-*   **Amirhossein Mansour:** Implementing Controller
+* **Barbod Habibi:** Implemented permissions and functionality for opening the camera and gallery.
+* **Mehrshad Farahbakhsh:** Developed the profile repository and handled image saving/clearing.
+* **Amirhossein Mansour:** Designed the UI layout and ensured proper functionality for different screen orientations.
