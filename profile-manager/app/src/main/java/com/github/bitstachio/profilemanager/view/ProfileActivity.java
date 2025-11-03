@@ -1,4 +1,4 @@
-package com.github.bitstachio.profilemanager.ui.theme;
+package com.github.bitstachio.profilemanager.view;
 
 import android.net.Uri;
 import android.os.Bundle;
