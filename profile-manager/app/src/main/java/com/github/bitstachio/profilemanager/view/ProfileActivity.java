@@ -1,5 +1,6 @@
 package com.github.bitstachio.profilemanager.view;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +19,10 @@ import com.github.bitstachio.profilemanager.controller.MainController;
 import com.github.bitstachio.profilemanager.model.ProfilePhoto;
 import com.github.bitstachio.profilemanager.model.ProfileRepository;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity implements MainController.Delegate {
@@ -31,17 +36,24 @@ public class ProfileActivity extends AppCompatActivity implements MainController
 
     private Uri pendingCameraOutputUri = null;
 
-    // Gallery (GetContent)
-    private final ActivityResultLauncher<String> pickImage =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+    // Gallery picker using modern Photo Picker API
+    private final ActivityResultLauncher<PickVisualMediaRequest> pickImage =
+            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri == null) {
                     onStatus("Gallery canceled");
                     return;
                 }
-                controller.deliverPhoto(uri);
+                try {
+                    Uri savedUri = copyToInternalStorage(uri);
+                    controller.deliverPhoto(savedUri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+                    onStatus("Failed to save image");
+                }
             });
 
-    // Camera (TakePicture to precreated Uri)
+    // Camera capture
     private final ActivityResultLauncher<Uri> takePicture =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
                 if (success && pendingCameraOutputUri != null) {
@@ -56,7 +68,12 @@ public class ProfileActivity extends AppCompatActivity implements MainController
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     (Map<String, Boolean> result) -> {
                         boolean all = true;
-                        for (Boolean granted : result.values()) { if (!granted) { all = false; break; } }
+                        for (Boolean granted : result.values()) {
+                            if (!granted) {
+                                all = false;
+                                break;
+                            }
+                        }
                         if (all) {
                             onStatus("Permissions granted");
                         } else {
@@ -77,6 +94,7 @@ public class ProfileActivity extends AppCompatActivity implements MainController
         repo = new ProfileRepository(getApplicationContext());
         model = repo.load();
 
+        // Restore saved URI safely
         if (savedInstanceState != null) {
             String s = savedInstanceState.getString("img_uri");
             if (s != null) model.setImageUri(Uri.parse(s));
@@ -86,16 +104,21 @@ public class ProfileActivity extends AppCompatActivity implements MainController
 
         Button btnTake = findViewById(R.id.btnTakePhoto);
         Button btnPick = findViewById(R.id.btnPickPhoto);
+        Button btnClear = findViewById(R.id.btnClearPhoto); // Ensure XML has this button
 
+        // Launch Photo Picker
         btnPick.setOnClickListener(v -> {
             String[] perms = controller.requiredGalleryPermissions();
             if (!controller.hasAllPermissions(perms)) {
                 controller.requestPermissionsIfNeeded(perms);
                 return;
             }
-            pickImage.launch("image/*");
+            pickImage.launch(new PickVisualMediaRequest.Builder()
+                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                    .build());
         });
 
+        // Launch Camera
         btnTake.setOnClickListener(v -> {
             String[] perms = controller.requiredCameraPermissions();
             if (!controller.hasAllPermissions(perms)) {
@@ -110,12 +133,44 @@ public class ProfileActivity extends AppCompatActivity implements MainController
                 Toast.makeText(this, "Error preparing camera output", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Clear image
+        btnClear.setOnClickListener(v -> {
+            model.setImageUri(null);
+            repo.save(model);
+            imageView.setImageDrawable(null);
+            onStatus("Image cleared");
+            Toast.makeText(this, "Image cleared", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private Uri copyToInternalStorage(Uri sourceUri) throws IOException {
+        ContentResolver resolver = getContentResolver();
+        File destFile = new File(getFilesDir(), "profile_photo.jpg");
+
+        try (InputStream in = resolver.openInputStream(sourceUri);
+             FileOutputStream out = new FileOutputStream(destFile)) {
+            byte[] buffer = new byte[4096];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+        }
+        return Uri.fromFile(destFile);
     }
 
     private void renderModel() {
         if (model.getImageUri() != null) {
-            imageView.setImageURI(model.getImageUri());
-            onStatus("Image loaded");
+            try {
+                imageView.setImageURI(model.getImageUri());
+                onStatus("Image loaded");
+            } catch (SecurityException e) {
+                model.setImageUri(null);
+                repo.save(model);
+                imageView.setImageDrawable(null);
+                onStatus("Image access lost — please reselect");
+                Toast.makeText(this, "Image access lost — please reselect", Toast.LENGTH_SHORT).show();
+            }
         } else {
             imageView.setImageDrawable(null);
             onStatus("Ready");
