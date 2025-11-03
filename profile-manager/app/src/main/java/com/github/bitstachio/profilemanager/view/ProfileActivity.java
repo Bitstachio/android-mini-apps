@@ -25,6 +25,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+/**
+ * Activity for managing the user's profile photo.
+ * <p>
+ * Allows users to take a photo, pick an image from the gallery, or clear the current image.
+ * Ensures images are persisted in internal storage to prevent access issues on app restart.
+ * Handles runtime permissions, orientation changes, and secure media access.
+ */
 public class ProfileActivity extends AppCompatActivity implements MainController.Delegate {
 
     private ImageView imageView;
@@ -36,7 +43,10 @@ public class ProfileActivity extends AppCompatActivity implements MainController
 
     private Uri pendingCameraOutputUri = null;
 
-    // Gallery picker using modern Photo Picker API
+    /**
+     * ActivityResultLauncher for picking images from the gallery.
+     * Saves the selected image to internal storage before delivering it to the controller.
+     */
     private final ActivityResultLauncher<PickVisualMediaRequest> pickImage =
             registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                 if (uri == null) {
@@ -53,7 +63,10 @@ public class ProfileActivity extends AppCompatActivity implements MainController
                 }
             });
 
-    // Camera capture
+    /**
+     * ActivityResultLauncher for taking a photo using the device camera.
+     * The photo is stored at a pre-created Uri.
+     */
     private final ActivityResultLauncher<Uri> takePicture =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), success -> {
                 if (success && pendingCameraOutputUri != null) {
@@ -63,7 +76,10 @@ public class ProfileActivity extends AppCompatActivity implements MainController
                 }
             });
 
-    // Request multiple permissions
+    /**
+     * ActivityResultLauncher for requesting multiple runtime permissions.
+     * Updates status and shows a toast if permissions are denied.
+     */
     private final ActivityResultLauncher<String[]> requestPerms =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(),
                     (Map<String, Boolean> result) -> {
@@ -82,6 +98,11 @@ public class ProfileActivity extends AppCompatActivity implements MainController
                         }
                     });
 
+    /**
+     * Initializes the activity, sets up UI elements, and restores any saved image URI.
+     *
+     * @param savedInstanceState Bundle containing saved state from a previous instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +125,7 @@ public class ProfileActivity extends AppCompatActivity implements MainController
 
         Button btnTake = findViewById(R.id.btnTakePhoto);
         Button btnPick = findViewById(R.id.btnPickPhoto);
-        Button btnClear = findViewById(R.id.btnClearPhoto); // Ensure XML has this button
+        Button btnClear = findViewById(R.id.btnClearPhoto);
 
         // Launch Photo Picker
         btnPick.setOnClickListener(v -> {
@@ -144,6 +165,13 @@ public class ProfileActivity extends AppCompatActivity implements MainController
         });
     }
 
+    /**
+     * Copies a selected gallery image to internal storage to ensure persistent access.
+     *
+     * @param sourceUri Uri of the selected image
+     * @return Uri pointing to the internally saved copy
+     * @throws IOException if reading or writing fails
+     */
     private Uri copyToInternalStorage(Uri sourceUri) throws IOException {
         ContentResolver resolver = getContentResolver();
         File destFile = new File(getFilesDir(), "profile_photo.jpg");
@@ -159,6 +187,10 @@ public class ProfileActivity extends AppCompatActivity implements MainController
         return Uri.fromFile(destFile);
     }
 
+    /**
+     * Updates the UI to display the current image in the model.
+     * Handles SecurityException if the image URI is no longer accessible.
+     */
     private void renderModel() {
         if (model.getImageUri() != null) {
             try {
@@ -177,16 +209,32 @@ public class ProfileActivity extends AppCompatActivity implements MainController
         }
     }
 
+    /**
+     * Delegate callback for requesting runtime permissions.
+     *
+     * @param permissions Array of permissions that need to be requested
+     */
     @Override
     public void onNeedPermissions(String[] permissions) {
         requestPerms.launch(permissions);
     }
 
+    /**
+     * Updates the status TextView with a message.
+     *
+     * @param message Message to display in the UI
+     */
     @Override
     public void onStatus(String message) {
         statusText.setText(message);
     }
 
+    /**
+     * Delegate callback when a new photo URI is available.
+     * Saves the URI in the repository and refreshes the UI.
+     *
+     * @param uri Uri of the newly selected or captured image
+     */
     @Override
     public void onNewPhotoUri(Uri uri) {
         model.setImageUri(uri);
@@ -194,6 +242,12 @@ public class ProfileActivity extends AppCompatActivity implements MainController
         renderModel();
     }
 
+    /**
+     * Saves the current image URI to the instance state bundle to survive
+     * configuration changes such as orientation change.
+     *
+     * @param out Bundle to save state
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle out) {
         super.onSaveInstanceState(out);
